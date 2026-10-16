@@ -1,0 +1,48 @@
+CREATE DATABASE AcenteDB;
+
+USE AcenteDB;
+GO
+
+CREATE TABLE Sehirler (
+    SehirID INT IDENTITY(1,1) PRIMARY KEY,
+    SehirAdi NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Acenteler (
+    AcenteID INT IDENTITY(1,1) PRIMARY KEY,
+    AcenteAdi NVARCHAR(100) NOT NULL,
+    Sehir NVARCHAR(50) NOT NULL,
+    KullaniciAdi NVARCHAR(50) NOT NULL,
+    Sifre NVARCHAR(100) NOT NULL,
+    KomisyonOrani INT NOT NULL DEFAULT 0,
+    Aktif BIT NOT NULL DEFAULT 1
+);
+
+CREATE TABLE Seferler (
+    SeferID INT IDENTITY(1,1) PRIMARY KEY,
+    Kalkis NVARCHAR(50) NOT NULL,
+    Varis NVARCHAR(50) NOT NULL,
+    Tarih DATE NOT NULL,
+    Saat NVARCHAR(5) NOT NULL,
+    Fiyat INT NOT NULL,
+    Plaka NVARCHAR(15),
+    Koltuk INT NOT NULL,
+    DoluKoltuk INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Rezervasyonlar (
+    RezervasyonID INT IDENTITY(1,1) PRIMARY KEY,
+    SeferID INT NOT NULL FOREIGN KEY REFERENCES Seferler(SeferID),
+    AcenteID INT NOT NULL FOREIGN KEY REFERENCES Acenteler(AcenteID),
+    Kod NVARCHAR(10) NOT NULL,
+    YolcuAd NVARCHAR(100) NOT NULL,
+    TcKimlikNo CHAR(11) NOT NULL,
+    Telefon NVARCHAR(20) NOT NULL,
+    KoltukSayisi INT NOT NULL,
+    Koltuklar NVARCHAR(100),
+    Tutar INT NOT NULL,
+    KomisyonTutari INT NOT NULL DEFAULT 0,
+    Durum NVARCHAR(15) NOT NULL DEFAULT 'beklemede',
+    TarihOlusturma DATETIME NOT NULL DEFAULT GETDATE()
+);
+GO
